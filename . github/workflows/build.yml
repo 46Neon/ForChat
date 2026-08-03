@@ -1,0 +1,27 @@
+name: Build ForChat APK
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalar zlib y dependencias
+        run: sudo apt-get update && sudo apt-get install -y zlib1g-dev libffi-dev
+      - name: Instalar Buildozer
+        run: pip install buildozer
+      - name: Crear .env con Secrets
+        run: |
+          echo "KEY1=${{ secrets.KEY1 }}" >> .env
+          echo "KEY2=${{ secrets.KEY2 }}" >> .env
+          echo "KEY3=${{ secrets.KEY3 }}" >> .env
+          echo "KEY4=${{ secrets.KEY4 }}" >> .env
+      - name: Compilar APK
+        run: buildozer android debug
+      - name: Subir APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: ForChat-APK
+          path: bin/*.apk
