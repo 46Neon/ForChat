@@ -1,0 +1,4 @@
+flet
+httpx
+python-dotenv
+buildozer
